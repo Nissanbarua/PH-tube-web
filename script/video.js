@@ -32,14 +32,19 @@ const dispalyvideos = (video) => {
     const card = document.createElement("div");
     card.classList = "card card-compact";
     card.innerHTML = `
-            <figure class = 'h-[200px]'>
-    <img class = 'w-full h-full object-cover'
+            <figure class = "h-[200px] relative">
+    <img class = "w-full h-full object-cover"
       src=${element.thumbnail}
       alt="" />
+      <span class = "absolute bg-black text-white p-1 right-2 bottom-2 rounded-full ">
+      ${element.others.posted_date}
+      </span>
   </figure>
   <div class="px-0 py-2 flex items-center gap-3">
    <div class="w-10 h-10">
-    <img class='w-full h-full rounded-full object-cover' src=${element.authors[0].profile_picture}>
+    <img class="w-full h-full rounded-full object-cover" src=${
+      element.authors[0].profile_picture
+    }>
    </div>
    <div>
    <h2 class = 'font-bold'>
@@ -49,7 +54,12 @@ const dispalyvideos = (video) => {
    <p class='text-xs'>
    ${element.authors[0].profile_name}
    </p>
-   <img class = 'w-4 h-4' src = "https://img.icons8.com/?size=100&id=85097&format=png&color=228BE6">
+   ${
+     element.authors[0].verified === true
+       ? '<img class = "w-4 h-4" src = "https://img.icons8.com/?size=100&id=85097&format=png&color=228BE6"></img>'
+       : ""
+   }
+  
   </div>
    <p>
    </p>
