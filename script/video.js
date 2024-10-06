@@ -50,7 +50,7 @@ const displayDeatails = (video) => {
   <p>
   ${video.description}
   </p>
-  `
+  `;
   //way-2
   document.getElementById("customModal").showModal();
 };
@@ -71,8 +71,10 @@ const displayCatagories = (categories) => {
 };
 
 //load videos
-const loadvideos = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadvideos = (serchText = "") => {
+  fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${serchText} `
+  )
     .then((res) => res.json())
     .then((data) => dispalyvideos(data.videos))
     .catch((err) => console.log(err));
@@ -148,6 +150,8 @@ const dispalyvideos = (video) => {
     videosContainer.append(card);
   });
 };
-
+document.getElementById("search-input").addEventListener("keyup", (e) => {
+  loadvideos(e.target.value);
+});
 loadCatagory();
 loadvideos();
