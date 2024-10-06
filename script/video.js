@@ -6,12 +6,26 @@ function getTimeString(time) {
   remainingTime = remainingTime % 60;
   return `${hour} H ${minutes}M ${remainingTime}S`;
 }
+const removeActiveBtn = () => {
+  const buttons = document.getElementsByClassName("category-btn");
+  for (let btn of buttons) {
+    btn.classList.remove("active");
+  }
+};
+
 //alert when click btn
 const loadCatagoriesVideo = (id) => {
   // alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
-    .then((data) => dispalyvideos(data.category))
+    .then((data) => {
+      // remove active btn
+      removeActiveBtn();
+      // add active btn
+      const activeBtn = document.getElementById(`btn-${id}`);
+      activeBtn.classList.add("active");
+      dispalyvideos(data.category);
+    })
     .catch((err) => console.log(err));
 };
 //load category
@@ -21,6 +35,26 @@ const loadCatagory = () => {
     .then((data) => displayCatagories(data.categories))
     .catch((err) => console.log(err));
 };
+// load deatails
+const videoDetails = async (videoId) => {
+  const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  displayDeatails(data.video);
+};
+
+const displayDeatails = (video) => {
+  const deatailsContainer = document.getElementById("modal-content");
+  deatailsContainer.innerHTML = `
+  <img src=${video.thumbnail}>
+  <p>
+  ${video.description}
+  </p>
+  `
+  //way-2
+  document.getElementById("customModal").showModal();
+};
+
 //display
 const displayCatagories = (categories) => {
   const categoryContainer = document.getElementById("category");
@@ -28,7 +62,7 @@ const displayCatagories = (categories) => {
   categories.forEach((element) => {
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-    <button onclick="loadCatagoriesVideo(${element.category_id})" class = "btn">
+    <button id="btn-${element.category_id}" onclick="loadCatagoriesVideo(${element.category_id})" class = "btn category-btn">
     ${element.category}
     </button>
     `;
@@ -57,7 +91,6 @@ const dispalyvideos = (video) => {
     </h2>
     </div>
     `;
-    return;
   } else {
     videosContainer.classList.add("grid");
   }
@@ -101,8 +134,14 @@ const dispalyvideos = (video) => {
    }
   
   </div>
-   <p>
-   </p>
+  
+   
+   <button onclick="videoDetails('${
+     element.video_id
+   }')" class="btn-error btn btn-sm mt-1">
+    Details
+   </button>
+   
    </div>
   </div>
           `;
