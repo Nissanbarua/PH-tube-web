@@ -17,27 +17,6 @@ const displayCatagories = (categories) => {
   });
 };
 
-
-/* 
-category_id
-: 
-"1003"
-description
-: 
-"'Beyond The Pale' by Jim Gaffigan, with 2.6K views, is a comedic gem that explores everyday observations and family life with a light-hearted and witty approach. Jim's humor is accessible and delightful, making this show perfect for anyone who enjoys clean, observational comedy."
-others
-: 
-{views: '2.6K', posted_date: '15400'}
-thumbnail
-: 
-"https://i.ibb.co/ZNggzdm/cake.jpg"
-title
-: 
-"Beyond The Pale"
-video_id
-: 
-"aaak"*/ 
-
 //load videos
 const loadvideos = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
@@ -53,17 +32,28 @@ const dispalyvideos = (video) => {
     const card = document.createElement("div");
     card.classList = "card card-compact";
     card.innerHTML = `
-            <figure>
-    <img
+            <figure class = 'h-[200px]'>
+    <img class = 'w-full h-full object-cover'
       src=${element.thumbnail}
-      alt="Shoes" />
+      alt="" />
   </figure>
-  <div class="card-body">
-    <h2 class="card-title">Shoes!</h2>
-    <p>If a dog chews shoes whose shoes does he choose?</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Buy Now</button>
-    </div>
+  <div class="px-0 py-2 flex items-center gap-3">
+   <div class="w-10 h-10">
+    <img class='w-full h-full rounded-full object-cover' src=${element.authors[0].profile_picture}>
+   </div>
+   <div>
+   <h2 class = 'font-bold'>
+   ${element.title}
+   </h2>
+  <div class = 'flex items-center gap-1'>
+   <p class='text-xs'>
+   ${element.authors[0].profile_name}
+   </p>
+   <img class = 'w-4 h-4' src = "https://img.icons8.com/?size=100&id=85097&format=png&color=228BE6">
+  </div>
+   <p>
+   </p>
+   </div>
   </div>
           `;
     videosContainer.append(card);
@@ -71,3 +61,22 @@ const dispalyvideos = (video) => {
 };
 loadCatagory();
 loadvideos();
+
+// {
+//   "category_id": "1001",
+//   "video_id": "aaah",
+//   "thumbnail": "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
+//   "title": "Colors of the Wind",
+//   "authors": [
+//       {
+//           "profile_picture": "https://i.ibb.co/6r4cx4P/ethen-clack.png",
+//           "profile_name": "Ethan Clark",
+//           "verified": true
+//       }
+//   ],
+//   "others": {
+//       "views": "233K",
+//       "posted_date": "16090"
+//   },
+//   "description": "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music."
+// }
