@@ -1,3 +1,19 @@
+// time section
+function getTimeString(time) {
+  const hour = parseInt(time / 3600);
+  let remainingTime = time % 3600;
+  const minutes = parseInt(remainingTime / 60);
+  remainingTime = remainingTime % 60;
+  return `${hour} H ${minutes}M ${remainingTime}S`;
+}
+//alert when click btn
+const loadCatagoriesVideo = (id) => {
+  // alert(id);
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => dispalyvideos(data.category))
+    .catch((err) => console.log(err));
+};
 //load category
 const loadCatagory = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -5,15 +21,18 @@ const loadCatagory = () => {
     .then((data) => displayCatagories(data.categories))
     .catch((err) => console.log(err));
 };
-
+//display
 const displayCatagories = (categories) => {
   const categoryContainer = document.getElementById("category");
 
   categories.forEach((element) => {
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = element.category;
-    categoryContainer.append(button);
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+    <button onclick="loadCatagoriesVideo(${element.category_id})" class = "btn">
+    ${element.category}
+    </button>
+    `;
+    categoryContainer.append(buttonContainer);
   });
 };
 
@@ -25,8 +44,8 @@ const loadvideos = () => {
     .catch((err) => console.log(err));
 };
 const dispalyvideos = (video) => {
-  console.log(video);
   const videosContainer = document.getElementById("videos");
+  videosContainer.innerHTML = "";
   video.forEach((element) => {
     console.log(element);
     const card = document.createElement("div");
@@ -36,9 +55,14 @@ const dispalyvideos = (video) => {
     <img class = "w-full h-full object-cover"
       src=${element.thumbnail}
       alt="" />
-      <span class = "absolute bg-black text-white p-1 right-2 bottom-2 rounded-full ">
-      ${element.others.posted_date}
-      </span>
+      ${
+        element.others.posted_date?.length === 0
+          ? ""
+          : `<span class="absolute bg-black text-white text-xs p-1 right-2 bottom-2 rounded-full ">
+            ${getTimeString(element.others.posted_date)}
+          </span>`
+      }
+     
   </figure>
   <div class="px-0 py-2 flex items-center gap-3">
    <div class="w-10 h-10">
@@ -69,24 +93,6 @@ const dispalyvideos = (video) => {
     videosContainer.append(card);
   });
 };
+
 loadCatagory();
 loadvideos();
-
-// {
-//   "category_id": "1001",
-//   "video_id": "aaah",
-//   "thumbnail": "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
-//   "title": "Colors of the Wind",
-//   "authors": [
-//       {
-//           "profile_picture": "https://i.ibb.co/6r4cx4P/ethen-clack.png",
-//           "profile_name": "Ethan Clark",
-//           "verified": true
-//       }
-//   ],
-//   "others": {
-//       "views": "233K",
-//       "posted_date": "16090"
-//   },
-//   "description": "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music."
-// }
