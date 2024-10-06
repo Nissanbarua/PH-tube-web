@@ -46,6 +46,22 @@ const loadvideos = () => {
 const dispalyvideos = (video) => {
   const videosContainer = document.getElementById("videos");
   videosContainer.innerHTML = "";
+
+  if (video == 0) {
+    videosContainer.classList.remove("grid");
+    videosContainer.innerHTML = `
+    <div class = "min-h-screen flex flex-col justify-center items-center gap-5">
+    <img src="./images/Icon.png"/>
+    <h2 class="font-bold text-2xl">
+    Oops!! Sorry, There is no content here
+    </h2>
+    </div>
+    `;
+    return;
+  } else {
+    videosContainer.classList.add("grid");
+  }
+
   video.forEach((element) => {
     console.log(element);
     const card = document.createElement("div");
